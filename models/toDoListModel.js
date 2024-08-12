@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ToDoItemSchema = new Schema({
     content: {
         type: String,
-        required: true,
+        required: [true,'Please enter content for to do item'],
         trim: true
     },
     isCompleted: {
@@ -30,12 +30,12 @@ const ToDoItemSchema = new Schema({
 const ToDoListSchema = new Schema({
     subject: {
         type: String,
-        required: true,
+        required: [true,'Please enter subject for this to-do list.'],
         trim: true
     },
     title: {
         type: String,
-        required: true,
+        required: [true,'Please enter title for this to-do list.'],
         trim: true
     },
     items: [ToDoItemSchema],
@@ -66,5 +66,5 @@ const ToDoListSchema = new Schema({
 });
 
 const ToDoList = mongoose.model('ToDoList', ToDoListSchema);
-const ToDoItem = mongoose.model('ToDoItem',)
+const ToDoItem = mongoose.model('ToDoItem',ToDoItemSchema)
 module.exports = {ToDoList,ToDoItem};
