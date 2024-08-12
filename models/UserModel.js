@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ProfileSchema = new Schema({
-    firstName: String,
-    lastName: String,
-    bio: String
-});
 
 const UserSchema = new Schema({
     username: {
@@ -22,7 +17,6 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    profile: ProfileSchema,
     createdAt: {
         type: Date,
         default: Date.now
@@ -34,5 +28,4 @@ const UserSchema = new Schema({
 });
 
 const User = mongoose.model('User', UserSchema);
-
-module.exports = User;
+module.exports = {User};

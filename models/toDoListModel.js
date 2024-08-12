@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const ToDoItemSchema = new Schema({
     content: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     isCompleted: {
         type: Boolean,
@@ -15,7 +16,6 @@ const ToDoItemSchema = new Schema({
         enum: ['low', 'medium', 'high'],
         default: 'low'
     },
-    dueDate: Date,
     progress: {
         type: String,
         enum: ['to-do', 'in-progress', 'done'],
@@ -30,13 +30,18 @@ const ToDoItemSchema = new Schema({
 const ToDoListSchema = new Schema({
     subject: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     items: [ToDoItemSchema],
+    dueDate: {
+        type: Date
+    },
     isArchived: {
         type: Boolean,
         default: false
@@ -45,7 +50,10 @@ const ToDoListSchema = new Schema({
         type: Boolean,
         default: false
     },
-    labels: [String],
+    labels: [{
+        type: String,
+        trim: true
+    }],
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -58,5 +66,5 @@ const ToDoListSchema = new Schema({
 });
 
 const ToDoList = mongoose.model('ToDoList', ToDoListSchema);
-
-module.exports = ToDoList;
+const ToDoItem = mongoose.model('ToDoItem',)
+module.exports = {ToDoList,ToDoItem};
