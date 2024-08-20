@@ -2,6 +2,7 @@ const express=require('express');
 const app=express();
 const cors=require("cors");
 const authRoutes = require('./routes/authRoutes')
+const todolistRoutes = require('./routes/todolistRoutes')
 const {Connect_to_Mongo_DB}=require('./connect');
 const cookieParser = require('cookie-parser')
 const {requireAuth} = require('./middleware/authMiddleware')
@@ -25,6 +26,7 @@ Connect_to_Mongo_DB(url);
 app.use(express.json());
 app.use(cors());
 app.use(authRoutes);
+app.use(todolistRoutes);
 app.use(cookieParser())
 
 
