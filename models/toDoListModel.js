@@ -28,14 +28,15 @@ const ToDoItemSchema = new Schema({
 });
 
 const ToDoListSchema = new Schema({
-    subject: {
-        type: String,
-        required: [true,'Please enter subject for this to-do list.'],
-        trim: true
-    },
     title: {
         type: String,
         required: [true,'Please enter title for this to-do list.'],
+        trim: true,
+        uniqure: true
+    },
+    category: {
+        type: String,
+        required: [true,'Please enter category for this to-do list.'],
         trim: true
     },
     items: [ToDoItemSchema],
@@ -62,6 +63,10 @@ const ToDoListSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    deleteList:{
+        type:Boolean,
+        default:false
     }
 });
 
