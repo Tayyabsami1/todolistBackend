@@ -1,9 +1,29 @@
 const ToDo = require("../models/toDoListModel");
 const User = require("../models/UserModel");
 
+
+async function getTotalLists(req, res){
+  // const userId = req.cookies.jwt.userId;
+  const {userId} = req.body;
+
+  try{
+    const totalLists = await ToDo.ToDoList.countDocuments({user:userId});
+    return res.json({
+      message: `Total number of to-do lists for user ${userId}: ${totalLists}`,
+      totalLists
+    })
+  } catch(err){
+    console.log(err);
+    return res.status(500).json({
+      message: 'Error occurred while fetching the total number of lists.',
+      error: err.message
+    })
+  }
+}
+
 async function searchToDoListsByTitle(req, res) {
   const { title } = req.body;
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
 
   try {
     // Search for to-do lists with titles that contain the specified search string (case-insensitive)
@@ -30,7 +50,7 @@ async function searchToDoListsByTitle(req, res) {
 }
 
 async function getToDoListsByCategory(req, res) {
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
   const { category } = req.body;
 
   try {
@@ -58,7 +78,7 @@ async function getToDoListsByCategory(req, res) {
 }
 
 async function getPinnedToDoLists(req, res) {
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
   try {
     const pinnedToDoLists = await ToDo.ToDoList.find({
       user: userId,
@@ -81,7 +101,7 @@ async function getPinnedToDoLists(req, res) {
 }
 
 async function getArchivedToDoLists(req, res) {
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
 
   try {
     const archivedToDoLists = await ToDo.ToDoList.find({
@@ -107,7 +127,7 @@ async function getArchivedToDoLists(req, res) {
 }
 
 async function getToDoListsByDate(req, res) {
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
 
   const { date } = req.body;
 
@@ -199,7 +219,7 @@ async function updateList(userId, title, updates) {
 }
 
 async function createToDoList(req, res) {
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
   const { title, category, dueDate, isPinned, isArchived, deleteList } =
     req.body;
   if (deleteList === true) {
@@ -248,7 +268,8 @@ async function createToDoList(req, res) {
 }
 
 async function getToDoLists(req, res) {
-  const userId = req.cookies.jwt.userId;
+  // const userId = req.cookies.jwt.userId;
+  const {userId} = req.body;
   try {
     const todoLists = await ToDo.ToDoList.find({ user: userId });
     return res.json(todoLists);
@@ -263,4 +284,5 @@ module.exports = {
   getToDoListsByDate,
   getPinnedToDoLists,
   getArchivedToDoLists,
+  getTotalLists
 };

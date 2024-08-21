@@ -7,5 +7,6 @@ router.get('/todolist_get',todolistController.getToDoLists)
 router.get('/todolistbydate_get',todolistController.getToDoListsByDate)
 router.get('/todolistpinned_get',todolistController.getPinnedToDoLists)
 router.get('/todolistarchived_get',todolistController.getArchivedToDoLists)
+router.get('/todolist/count_lists',todolistController.getTotalLists)
 
 module.exports = router;

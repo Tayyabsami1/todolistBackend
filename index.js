@@ -6,6 +6,7 @@ const todolistRoutes = require('./routes/todolistRoutes')
 const {Connect_to_Mongo_DB}=require('./connect');
 const cookieParser = require('cookie-parser')
 const {requireAuth} = require('./middleware/authMiddleware')
+const todoitemRoutes = require('./routes/todoitemRoutes')
 require('dotenv').config();
 
 //DB connection
@@ -23,11 +24,13 @@ Connect_to_Mongo_DB(url);
 
 //Router Connections
 
+app.use(cookieParser())
 app.use(express.json());
 app.use(cors());
 app.use(authRoutes);
 app.use(todolistRoutes);
-app.use(cookieParser())
+app.use(todoitemRoutes)
+
 
 
 
