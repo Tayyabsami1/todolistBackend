@@ -3,6 +3,8 @@ const { ToDoList, ToDoItem } = require('../models/toDoListModel'); // Assuming y
 
 async function getCompletedItems(req, res){
   const {userId} = req.body;
+//   const userId = req.cookies.jwt.userId;
+
   try{
     const lists = await ToDoList.find({user:userId});
     let completedItems = 0 ;
