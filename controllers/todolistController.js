@@ -1,5 +1,6 @@
 const ToDo = require("../models/toDoListModel");
 const User = require("../models/UserModel");
+const {TrashList} = require('../models/toDoListModel')
 
 
 async function getTotalLists(req, res){
@@ -169,13 +170,19 @@ async function deleteToDoList(userId, title) {
     if (!deletedList) {
       throw new Error("To-do list not found or could not be deleted.");
     }
-
+    const trashList = new TrashList({
+      title:deletedList.title,
+      category:deletedList.category,
+      items:deletedList.items,
+      dueDate:deletedList.dueDate,
+      user: deletedList.user
+  })
+    await trashList.save();
     // Optionally, you can also remove the reference from the User document
-    await User.updateOne(
+    const result = await User.updateOne(
       { _id: userId },
       { $pull: { toDoLists: deletedList._id } }
     );
-
     return deletedList;
   } catch (err) {
     console.log(err);
@@ -220,7 +227,7 @@ async function updateList(userId, title, updates) {
 
 async function createToDoList(req, res) {
   // const userId = req.cookies.jwt.userId;
-  const { title, category, dueDate, isPinned, isArchived, deleteList } =
+  const { title, category,userId, dueDate, isPinned, isArchived, deleteList } =
     req.body;
   if (deleteList === true) {
     const deletedList = await deleteToDoList(userId, title);
@@ -284,5 +291,7 @@ module.exports = {
   getToDoListsByDate,
   getPinnedToDoLists,
   getArchivedToDoLists,
-  getTotalLists
+  getTotalLists,
+  deleteToDoList
 };
+

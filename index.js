@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const {requireAuth} = require('./middleware/authMiddleware')
 const todoitemRoutes = require('./routes/todoitemRoutes')
 const userRoutes = require('./routes/userRoutes')
+const trashRoutes = require('./routes/trashRoutes')
 require('dotenv').config();
 
 //DB connection
@@ -32,7 +33,7 @@ app.use(authRoutes);
 app.use(todolistRoutes);
 app.use(todoitemRoutes);
 app.use(userRoutes)
-
+app.use(trashRoutes)
 
 
 
