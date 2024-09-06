@@ -146,10 +146,42 @@ async function deleteToDoItem(req, res) {
   }
 }
 
+
+async function getCompletionStatus(req, res){
+  const {userId} = req.body;
+//   const userId = req.cookies.jwt.userId;
+  try{
+    const lists = await ToDoList.find({user:userId});
+    let totalItems = 0 ;
+    let completedItems = 0 ;
+    lists.forEach(list=>{
+      list.items.forEach(item=>{
+        if(item.progress === 'done'){
+          completedItems++;
+        }
+        totalItems++;
+      })
+    })
+    let todoItems = totalItems - completedItems;
+    return res.json({
+      message:`Task Done:${(completedItems/totalItems)*100} Remaining Tasks: ${(todoItems/totalItems)*100}`,
+      donePercent: (completedItems/totalItems)*100,
+      todoPercent: (todoItems/totalItems)*100
+    })
+  } catch (err){
+    console.log(err);
+    return res.status(500).json({
+        message: 'Error occurred while fetching the Completion Status.',
+        error: err.message
+    }); 
+  }
+}
+
 module.exports = {
     createToDoItem,
     deleteToDoItem,
     getTotalItems,
     getPendingItems,
-    getCompletedItems
+    getCompletedItems,
+    getCompletionStatus
 }
