@@ -37,7 +37,7 @@ app.use(trashRoutes)
 
 
 
-app.get("/", requireAuth ,(req,res)=>{
+app.get("/" ,(req,res)=>{
     res.json("To Do list running at localhost:3000");
 })
 
