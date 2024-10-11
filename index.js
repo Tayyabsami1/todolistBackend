@@ -28,7 +28,9 @@ Connect_to_Mongo_DB(url);
 
 app.use(cookieParser())
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin:'http://localhost:5173',
+}));
 app.use(authRoutes);
 app.use(todolistRoutes);
 app.use(todoitemRoutes);
