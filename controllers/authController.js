@@ -65,13 +65,37 @@ async function loginUser(req, res) {
   }
 }
 
-async function logoutUser(req,res){
-  res.cookie('jwt','',{maxAge:1});
+async function logoutUser(req, res) {
+  console.log("Logout function called");
+  res.cookie('jwt', '', { maxAge: 1, httpOnly: true, secure: true, sameSite: 'strict' });
   res.json("Log out Success!");
 }
+
+//Check Auth Token
+const checkAuth = (req, res) => {
+  // Retrieve the JWT token from cookies
+  const token = req.cookies.jwt;
+
+  // If no token is present, return an unauthorized response
+  if (!token) {
+      return res.status(401).json({ message: 'Not authenticated' });
+  }
+
+  // Verify the token using the same secret used during token creation
+  jwt.verify(token, 'to-do list web app', (err, decodedToken) => {
+      if (err) {
+          // If token verification fails, return an unauthorized response
+          return res.status(401).json({ message: 'Invalid token' });
+      }
+
+      // If token is valid, send a success response
+      res.status(200).json({ message: 'Authenticated', userId: decodedToken.id });
+  });
+};
 
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  checkAuth
 };

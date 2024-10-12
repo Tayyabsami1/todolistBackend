@@ -30,13 +30,16 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(cors({
     origin:'http://localhost:5173',
+    credentials:true //Alow Cookies to be sent
 }));
-app.use(authRoutes);
-app.use(todolistRoutes);
-app.use(todoitemRoutes);
-app.use(userRoutes)
-app.use(trashRoutes)
+// Public Routes (No authentication needed)
+app.use('/auth',authRoutes); // Routes like login and register should remain public
 
+// Protected Routes (Require authentication)
+app.use('/todolist', requireAuth, todolistRoutes);
+app.use('/todoitem', requireAuth, todoitemRoutes);
+app.use('/user', requireAuth, userRoutes);
+app.use('/trashlist', requireAuth, trashRoutes);
 
 
 app.get("/" ,(req,res)=>{
