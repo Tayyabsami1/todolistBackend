@@ -275,13 +275,13 @@ async function createToDoList(req, res) {
 }
 
 async function getToDoLists(req, res) {
-  // const userId = req.cookies.jwt.userId;
-  const {userId} = req.body;
+  const {userId}=req.body;
   try {
-    const todoLists = await ToDo.ToDoList.find({ user: userId });
-    return res.json(todoLists);
+      const todoLists = await ToDo.ToDoList.find({ user: userId });
+      return res.json(todoLists);
   } catch (err) {
-    return res.json(err);
+      console.error('Error fetching to-do lists:', err);
+      return res.status(500).json({ error: 'Failed to fetch to-do lists.' });
   }
 }
 
@@ -292,6 +292,8 @@ module.exports = {
   getPinnedToDoLists,
   getArchivedToDoLists,
   getTotalLists,
-  deleteToDoList
+  deleteToDoList,
+  searchToDoListsByTitle,
+  getToDoListsByCategory
 };
 

@@ -1,22 +1,18 @@
 const jwt = require("jsonwebtoken");
 
 const requireAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
+    const token = req.cookies.jwt;
+
+    if (!token) return res.status(401).json({ message: "Not authenticated" });
+
     jwt.verify(token, "to-do list web app", (err, decodedToken) => {
-      if (err) {
-        console.log(err.message);
-        res.json({ message: "Invalid Token" });
-      } else {
-        console.log(decodedToken);
+        if (err) {
+            console.error("JWT verification error:", err.message);
+            return res.status(401).json({ message: "Invalid token" });
+        }
+        req.userId = decodedToken.id; // Attach userId to the request object
         next();
-      }
     });
-  } else {
-    res.json({ message: "Token does not exists" });
-  }
 };
 
-module.exports = {
-    requireAuth
-}
+module.exports = { requireAuth };

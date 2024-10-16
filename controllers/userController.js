@@ -48,7 +48,27 @@ async function changePassword(req, res){
         return res.status(500).json({ message: 'Error changing password', error: err.message });
     }
 }
-module.exports = {
-    updateUserDetails,
-    changePassword
+async function fetchUserData(req, res) {
+  try {
+      const userId = req.userId; // Assume this is populated by requireAuth middleware
+      const user = await User.findById(userId).select("-password"); // Exclude password from response
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.json(user); // Send user data to frontend
+  } catch (err) {
+      console.error("Error fetching user data:", err);
+      return res.status(500).json({
+          message: "An error occurred while fetching user data",
+          error: err.message,
+      });
+  }
 }
+
+module.exports = {
+  fetchUserData,
+  updateUserDetails,
+  changePassword,
+};
