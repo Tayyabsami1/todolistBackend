@@ -3,24 +3,31 @@ const User = require("../models/UserModel");
 const {TrashList} = require('../models/toDoListModel')
 
 
-async function getTotalLists(req, res){
-  // const userId = req.cookies.jwt.userId;
-  const {userId} = req.body;
+async function getTotalLists(req, res) {
+  const { userId } = req.body;
 
-  try{
-    const totalLists = await ToDo.ToDoList.countDocuments({user:userId});
-    return res.json({
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
+
+  try {
+    const totalLists = await ToDo.ToDoList.countDocuments({ user: userId });
+
+    console.log(`Total lists for user ${userId}: ${totalLists}`); // Debug log
+
+    return res.status(200).json({
       message: `Total number of to-do lists for user ${userId}: ${totalLists}`,
-      totalLists
-    })
-  } catch(err){
-    console.log(err);
+      totalLists,
+    });
+  } catch (err) {
+    console.error('Error fetching total lists:', err); // Debug log
     return res.status(500).json({
       message: 'Error occurred while fetching the total number of lists.',
-      error: err.message
-    })
+      error: err.message,
+    });
   }
 }
+
 
 async function searchToDoListsByTitle(req, res) {
   const { title } = req.body;
